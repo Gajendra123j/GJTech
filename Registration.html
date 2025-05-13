@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>GJ Tech Company Application Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/a81368914c.js" crossorigin="anonymous"></script>
+    <style>
+        /* General body and layout styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #74EBD5, #ACB6E5);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header styles */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Main content area styles */
+        main {
+            background: #fff;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 700px; /* Limit form width */
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        /* Marquee styles */
+        .marquee-container {
+            background: linear-gradient(to right, #ff9a8b, #ff6a88);
+            color: white;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%; /* Start text off-screen */
+            animation: marquee 15s linear infinite; /* Adjust duration as needed */
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+
+        /* Form section styles */
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .form-section h2 {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #4a5568; /* text-gray-700 */
+            border-bottom: 2px solid #667eea; /* Underline for section titles */
+            padding-bottom: 8px;
+        }
+
+        /* Form element styles */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="password"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        input[type="password"]:focus,
+        input[type="file"]:focus {
+            border-color: #667eea; /* Highlight on focus */
+            outline: none;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+        }
+
+        /* File input specific styles */
+        input[type="file"] {
+            padding-top: 12px; /* Adjust padding for file input */
+        }
+
+        /* Password error message style */
+        #passwordError {
+            color: #e53e3e; /* Red color for error */
+            font-size: 0.9rem;
+            margin-top: -10px; /* Pull up closer to the input */
+            margin-bottom: 15px;
+            display: none; /* Hidden by default */
+        }
+
+        /* Payment details section styles */
+        .payment-details {
+            text-align: center;
+        }
+
+        .payment-details p {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .payment-details strong {
+            color: #0056b3; /* Blue color for emphasis */
+        }
+
+        .payment-details img {
+            display: block;
+            margin: 20px auto; /* Center QR code */
+            border: 5px solid #fff; /* White border around QR */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .upi-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #38a169, #68d391); /* Green gradient */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .upi-link:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Submit button style */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2); /* Purple gradient */
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #e2e8f0; /* Light text color */
+        }
+
+        /* Header styles (moved from body) */
+        .bg-slate-800 { background-color: #1e293b; }
+        .text-white { color: #fff; }
+        .text-center { text-align: center; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .relative { position: relative; }
+        .overflow-hidden { overflow: hidden; }
+        .absolute { position: absolute; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+        .from-blue-600 { --tw-gradient-from: #2563eb; --tw-gradient-to: rgba(37, 99, 235, 0); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+        .to-purple-600 { --tw-gradient-to: #7e22ce; }
+        .opacity-20 { opacity: 0.2; }
+        .z-10 { z-index: 10; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .font-bold { font-weight: 700; }
+        .mt-2 { margin-top: 0.5rem; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .md\:flex-row { @media (min-width: 768px) { flex-direction: row; } }
+        .justify-center { justify-content: center; }
+        .items-center { align-items: center; }
+        .mt-4 { margin-top: 1rem; }
+        .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+        .md\:space-y-0 > :not([hidden]) ~ :not([hidden]) { @media (min-width: 768px) { margin-top: 0px; } }
+        .md\:space-x-4 > :not([hidden]) ~ :not([hidden]) { @media (min-width: 768px) { margin-left: 1rem; } }
+        .rounded-lg { border-radius: 0.5rem; }
+        .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+        .transform { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+        .hover\:scale-105:hover { --tw-scale-x: 1.05; --tw-scale-y: 1.05; }
+        .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .w-40 { width: 10rem; }
+        .h-40 { height: 10rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .hover\:underline:hover { text-decoration: underline; }
+
+        /* Navigation styles (moved from body) */
+        .bg-slate-700 { background-color: #374151; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .space-x-3 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.75rem; }
+        .md\:space-x-6 > :not([hidden]) ~ :not([hidden]) { @media (min-width: 768px) { margin-left: 1.5rem; } }
+        .md\:text-lg { @media (min-width: 768px) { font-size: 1.125rem; line-height: 1.75rem; } }
+        .sticky { position: sticky; }
+        .top-0 { top: 0px; }
+        .z-50 { z-index: 50; }
+        .w-full { width: 100%; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GJ Tech Company Application Form</h1>
+    </header>
+
+    <main>
+        <div class="marquee-container">
+            <div class="marquee-text">
+                Welcome to the GJ Tech (Company) Application Form! Fill out the details below and complete the payment.
+            </div>
+        </div>
+
+        <header class="bg-slate-800 text-white text-center py-6 shadow-md relative overflow-hidden w-full">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20"></div>
+            <div class="relative z-10">
+                <h1 class="text-3xl font-bold">GJ Tech</h1>
+                <p class="text-sm mt-2">Building the Future of Technology Together 👩‍💻</p>
+                <div class="flex flex-col md:flex-row justify-center items-center mt-4 space-y-4 md:space-y-0 md:space-x-4">
+                    <img src="download-removebg-preview.jpg" onerror="this.onerror=null; this.src='https://placehold.co/200x90/E2E8F0/A0AEC0?text=GJ+Tech+Banner';" alt="GJ Tech Banner" width="200" height="90" class="rounded-lg shadow transform hover:scale-105 transition-transform duration-300">
+                    <img src="ck.jpg" onerror="this.onerror=null; this.src='https://placehold.co/160x160/E2E8F0/A0AEC0?text=Tech+Animation';" alt="Tech Animation" class="w-40 h-40 rounded-lg shadow transform hover:scale-105 transition-transform duration-300" loading="lazy">
+                </div>
+                    <input type="text" id="pageSearch" placeholder="Search page..." class="mt-4 p-2 rounded text-black text-sm"/>
+                    <a href="settings.html" class="hover:underline">Settings ⚙️</a>
+                    <a href="Livemeet.html" class="hover:underline">Live Meet 📹</a>
+            </div>
+        </header>
+
+        <nav class="bg-slate-700 text-white text-center py-3 space-x-3 md:space-x-6 text-sm md:text-lg sticky top-0 z-50 shadow w-full">
+            <a href="home.html" class="hover:underline">Home 🏡</a>
+            <a href="blogs.html" class="hover:underline">Blogs 👩‍💻</a>
+            <a href="about.html" class="hover:underline">About 🎓</a>
+            <a href="contact.html" class="hover:underline">Contact 📶</a>
+            <a href="careergoals.html" class="hover:underline">Career Goals and Opportunities </a>
+            <a href="CoursesinManagement.html" class="hover:underline">Courses in Management 📚</a>
+            <a href="Registration.html" class="hover:underline">Registration ®</a>
+            <a href="login.html" class="hover:underline">Login</a>
+        </nav>
+
+        <form id="applicationForm" method="post" action="submit_form.php" enctype="multipart/form-data">
+            <div class="form-section">
+                <h2>Personal Information</h2>
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="fatherName">Father's Name</label>
+                <input type="text" id="fatherName" name="fatherName" required>
+
+                <label for="motherName">Mother's Name</label>
+                <input type="text" id="motherName" name="motherName" required>
+
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+
+            <div class="form-section">
+                <h2>Contact Information</h2>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-section">
+                <h2>Documents Upload</h2>
+                <label for="resume">Resume (PDF, max 5MB)</label>
+                <input type="file" id="resume" name="resume" accept=".pdf" required>
+
+                <label for="certificate">Certificate (PDF, max 5MB)</label>
+                <input type="file" id="certificate" name="certificate" accept=".pdf" required>
+
+                <label for="photo">Recent Passport Size Photo (JPG, PNG, max 1MB)</label>
+                <input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png" required>
+
+                <label for="signature">Scanned Signature (JPG, PNG, max 500KB)</label>
+                <input type="file" id="signature" name="signature" accept=".jpg, .jpeg, .png" required>
+
+                <label for="marksheet">High School Marksheet (PDF, max 5MB)</label>
+                <input type="file" id="marksheet" name="marksheet" accept=".pdf" required>
+
+            </div>
+
+            <div class="form-section">
+                <h2>Create Password</h2>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div id="passwordError">Passwords do not match!</div>
+            </div>
+
+            <div class="form-section payment-details">
+                <h2>Payment</h2>
+                <p><strong>Total Fee:</strong> ₹500</p>
+                <p>Please scan the QR code or use the link below to complete your payment.</p>
+                <img src="https://placehold.co/150x150/E0F7FA/0056B3?text=Your+QR+Code" alt="Payment QR Code">
+                <p>UPI ID: <strong>8445896023@ybl</strong></p>
+                <a href="upi://pay?pa=8445896023@ybl&pn=GJ%20Tech&mc=0000&tid=1234567890&url=https://www.gjtech.com/payment-success"
+                    class="upi-link">Pay Now with UPI App</a>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Application</button>
+        </form>
+    </main>
+    <div class="login-card">
+        <h1>Login</h1>
+        <form action="#" method="post">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input id="username" type="text" placeholder="Type your username" required>
+            </div>
+            <div class="input-group">
+                <label for="login-password">Password</label>
+                <input id="login-password" type="password" placeholder="Type your password" required>
+                <span class="forgot"><a href="#">Forgot password?</a></span>
+            </div>
+            <button type="submit" class="btn-login">LOGIN</button>
+        </form>
+        <div class="social-login">
+            <p>Or Sign Up Using</p>
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.google.com/" target="_blank"><i class="fab fa-google"></i></a>
+        </div>
+        <div class="signup">
+            <p>Or Sign Up Using <a href="#">SIGN UP</a></p>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 GJ Tech | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // JavaScript for password validation (real-time check as user types)
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordError = document.getElementById('passwordError');
+
+        confirmPassword.addEventListener('input', function () {
+            if (password.value !== confirmPassword.value) {
+                passwordError.style.display = 'block';
+            } else {
+                passwordError.style.display = 'none';
+            }
+        });
+
+        // More comprehensive client-side form validation on submit
+        const applicationForm = document.getElementById('applicationForm');
+
+        applicationForm.addEventListener('submit', function (event) {
+            // Prevent the default form submission if validation fails
+            let isValid = true;
+            const errors = [];
+
+            // --- 1. Validate Personal Information ---
+            const name = document.getElementById('name').value.trim();
+            const fatherName = document.getElementById('fatherName').value.trim();
+            const motherName = document.getElementById('motherName').value.trim();
+            const dob = document.getElementById('dob').value; // Date input value
+
+            if (name === '') {
+                errors.push('Full Name is required.');
+                isValid = false;
+            }
+            if (fatherName === '') {
+                errors.push('Father\'s Name is required.');
+                isValid = false;
+            }
+            if (motherName === '') {
+                errors.push('Mother\'s Name is required.');
+                isValid = false;
+            }
+            if (dob === '') {
+                errors.push('Date of Birth is required.');
+                isValid = false;
+            } else {
+                // Basic DOB validation: check if it's a valid date format (YYYY-MM-DD)
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+                    errors.push('Invalid Date of Birth format.');
+                    isValid = false;
+                }
+                // You could add more complex checks like age validation here
+            }
+
+
+            // --- 2. Validate Contact Information ---
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+
+            if (email === '') {
+                errors.push('Email Address is required.');
+                isValid = false;
+            } else {
+                // Basic email format validation using a regular expression
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(email)) {
+                    errors.push('Please enter a valid Email Address.');
+                    isValid = false;
+                }
+            }
+
+            if (phone === '') {
+                errors.push('Phone Number is required.');
+                isValid = false;
+            } else {
+                // Basic phone number validation (allows digits, spaces, hyphens, parentheses)
+                const phonePattern = /^[\d\s\-\(\)]+$/;
+                if (!phonePattern.test(phone)) {
+                    errors.push('Please enter a valid Phone Number.');
+                    isValid = false;
+                }
+                // You might want a more specific pattern based on expected country codes/formats
+            }
+
+            if (address === '') {
+                errors.push('Address is required.');
+                isValid = false;
+            }
+
+            // --- 3. Validate Password ---
+            // Password fields are already defined outside this listener for real-time check
+            // Need to re-get values for submission check as they might have changed
+            const passwordSubmit = document.getElementById('password').value;
+            const confirmPasswordSubmit = document.getElementById('confirmPassword').value;
+            // passwordError is also already defined
+
+            if (passwordSubmit === '') {
+                errors.push('Password is required.');
+                isValid = false;
+            }
+            if (confirmPasswordSubmit === '') {
+                errors.push('Confirm Password is required.');
+                isValid = false;
+            }
+            if (passwordSubmit !== confirmPasswordSubmit) {
+                errors.push('Passwords do not match.');
+                passwordError.style.display = 'block'; // Show the existing error message
+                isValid = false;
+            } else {
+                passwordError.style.display = 'none'; // Hide the existing error message if they match
+            }
+            // You could add password strength checks here (minimum length, characters, etc.)
+
+
+            // --- 4. Validate Document Uploads ---
+            const resumeInput = document.getElementById('resume');
+            const certificateInput = document.getElementById('certificate');
+            const photoInput = document.getElementById('photo');
+            const signatureInput = document.getElementById('signature');
+            const marksheetInput = document.getElementById('marksheet');
+
+
+            const maxFileSizePDF = 5 * 1024 * 1024; // 5MB for PDF
+            const maxFileSizePhoto = 1 * 1024 * 1024; // 1MB for Photo
+            const maxFileSizeSignature = 500 * 1024; // 500KB for Signature
+
+            const allowedTypesPDF = ['application/pdf'];
+            const allowedTypesImage = ['image/jpeg', 'image/png']; // Allow JPG and PNG
+
+
+            // Resume validation
+            if (resumeInput.files.length === 0) {
+                errors.push('Resume file is required.');
+                isValid = false;
+            } else {
+                const resumeFile = resumeInput.files[0];
+                if (resumeFile.size > maxFileSizePDF) {
+                    errors.push('Resume file is too large (max 5MB).');
+                    isValid = false;
+                }
+                if (!allowedTypesPDF.includes(resumeFile.type)) {
+                    errors.push('Invalid resume file type. Only PDF is allowed.');
+                    isValid = false;
+                }
+            }
+
+            // Certificate validation
+            if (certificateInput.files.length === 0) {
+                errors.push('Certificate file is required.');
+                isValid = false;
+            } else {
+                const certificateFile = certificateInput.files[0];
+                if (certificateFile.size > maxFileSizePDF) {
+                    errors.push('Certificate file is too large (max 5MB).');
+                    isValid = false;
+                }
+                if (!allowedTypesPDF.includes(certificateFile.type)) {
+                    errors.push('Invalid certificate file type. Only PDF is allowed.');
+                    isValid = false;
+                }
+            }
+
+            // Photo validation
+            if (photoInput.files.length === 0) {
+                errors.push('Photo file is required.');
+                isValid = false;
+            } else {
+                const photoFile = photoInput.files[0];
+                if (photoFile.size > maxFileSizePhoto) {
+                    errors.push('Photo file is too large (max 1MB).');
+                    isValid = false;
+                }
+                if (!allowedTypesImage.includes(photoFile.type)) {
+                    errors.push('Invalid photo file type. Only JPG and PNG are allowed.');
+                    isValid = false;
+                }
+            }
+
+            // Signature validation
+            if (signatureInput.files.length === 0) {
+                errors.push('Signature file is required.');
+                isValid = false;
+            } else {
+                const signatureFile = signatureInput.files[0];
+                if (signatureFile.size > maxFileSizeSignature) {
+                    errors.push('Signature file is too large (max 500KB).');
+                    isValid = false;
+                }
+                if (!allowedTypesImage.includes(signatureFile.type)) {
+                    errors.push('Invalid signature file type. Only JPG and PNG are allowed.');
+                    isValid = false;
+                }
+            }
+
+            // Marksheet validation
+            if (marksheetInput.files.length === 0) {
+                errors.push('High School Marksheet file is required.');
+                isValid = false;
+            } else {
+                const marksheetFile = marksheetInput.files[0];
+                if (marksheetFile.size > maxFileSizePDF) {
+                    errors.push('High School Marksheet file is too large (max 5MB).');
+                    isValid = false;
+                }
+                if (!allowedTypesPDF.includes(marksheetFile.type)) {
+                    errors.push('Invalid High School Marksheet file type. Only PDF is allowed.');
+                    isValid = false;
+                }
+            }
+
+
+            // --- Final Check and Error Display ---
+            if (!isValid) {
+                // Prevent form submission
+                event.preventDefault();
+
+                // Display all accumulated errors (using alert for simplicity)
+                alert('Please fix the following errors:\n\n' + errors.join('\n'));
+
+                // Alternatively, you could display errors in a dedicated area on the page
+                // For example:
+                // const errorDisplayArea = document.getElementById('errorMessages'); // You'd need to add this div in your HTML
+                // errorDisplayArea.innerHTML = '<ul>' + errors.map(error => `<li>${error}</li>`).join('') + '</ul>';
+                // errorDisplayArea.style.display = 'block';
+            } else {
+                // If validation passes, the form will submit normally
+                // You could add a confirmation message here if desired
+                // alert('Validation successful! Submitting form...');
+            }
+        });
+    </script>
+</body>
+</html>

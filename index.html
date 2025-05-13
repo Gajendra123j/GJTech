@@ -1,306 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GJ Tech (company) - Home</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="style.css" href="style.css">
-  <style>
-    .multimedia-card {
-      transition: all 0.3s ease;
-    }
-    .multimedia-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-    }
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .announcement-marquee {
-      background: linear-gradient(to right, #87be06, #d6dd08);
-      color: rgb(26, 10, 10);
-      padding: 8px 0;
-      font-weight: 500;
-    }
-    .announcement-marquee a {
-      color: white;
-      text-decoration: underline;
-      margin: 0 10px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>GJ Tech (company) - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* General body styling */
+        body {
+            font-family: sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 from Tailwind */
+            color: #333; /* Default text color */
+        }
+        /* Multimedia Card Styles */
+        .multimedia-card {
+            width: 150px; /* Consistent width */
+            height: auto; /* Height adapts to content */
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+            margin: 10px; /* Adjusted margin for better spacing */
+            display: flex; /* Use flexbox for content alignment */
+            flex-direction: column; /* Stack image and text */
+            align-items: center; /* Center content horizontally */
+            text-align: center; /* Center text */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+            border-radius: 10px; /* Rounded corners */
+            overflow: hidden; /* Hide overflow for rounded corners */
+            background-color: white; /* Add background color */
+            padding: 15px; /* Add padding inside the card */
+        }
+        .multimedia-card img {
+            width: 100%; /* Image fills the card width */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 8px; /* Slightly smaller border-radius for image */
+            margin-bottom: 10px; /* Space between image and text */
+        }
+        .multimedia-card:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* Enhanced shadow on hover */
+        }
+        .multimedia-card p {
+             font-size: 0.9rem; /* Adjust font size */
+             line-height: 1.4; /* Adjust line height */
+             color: #4a5568; /* text-gray-700 from Tailwind */
+        }
+        /* Announcement Marquee Styles */
+        .announcement-marquee {
+            background: linear-gradient(to right, #11cfdc, #0fb4ae);
+            color: #1a0a0a; /* Adjusted color for better contrast */
+            padding: 8px 0;
+            font-weight: 500; /* Slightly bolder */
+            overflow: hidden; /* Ensure content stays within */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        .announcement-marquee marquee {
+             display: inline-block; /* Allow content to flow */
+             width: 100%; /* Fill container width */
+        }
+        .announcement-marquee a {
+            color: #000000; /* Contrast color for links */
+            text-decoration: underline;
+            margin: 0 15px; /* Increased margin */
+            font-weight: 600; /* Bolder link text */
+            transition: color 0.3s ease; /* Smooth color transition */
+        }
+         .announcement-marquee a:hover {
+             color: #ffffff; /* White color on hover */
+           }
+        /* Footer styles */
+        .footer {
+            background-color: #1a202c; /* bg-slate-900 from Tailwind */
+            padding: 40px 20px; /* Increased padding */
+            color: #e2e8f0; /* Light text color */
+            font-size: 0.9rem; /* Slightly smaller base font size */
+        }
+        .footer .container {
+            max-width: 1200px; /* Limit container width */
+            margin: 0 auto; /* Center container */
+            display: flex; /* Use flexbox for layout */
+            flex-wrap: wrap; /* Allow items to wrap */
+            justify-content: space-between; /* Distribute space between items */
+            gap: 30px; /* Add gap between flex items */
+        }
+         .footer > .container {
+             flex-direction: column; /* Stack items on small screens */
+             align-items: center;
+             text-align: center;
+         }
+         @media (min-width: 768px) { /* Apply flex layout on medium screens and up */
+             .footer > .container {
+                 flex-direction: row;
+                 align-items: flex-start;
+                 text-align: left;
+             }
+              .footer-links div {
+                 flex: 1; /* Allow footer link columns to grow */
+                 min-width: 150px; /* Minimum width for columns */
+                 margin-right: 20px; /* Space between columns */
+             }
+              .footer-links div:last-child {
+                 margin-right: 0; /* No margin on the last column */
+             }
+         }
+        .download-app h3 {
+            margin-bottom: 15px; /* Increased margin */
+            font-size: 1.2rem; /* Adjusted font size */
+            font-weight: 600;
+        }
+        .app-links img {
+            height: 45px; /* Slightly larger app icons */
+            margin-right: 15px; /* Increased margin */
+            vertical-align: middle;
+            transition: transform 0.3s ease; /* Smooth transition */
+        }
+         .app-links img:hover {
+             transform: scale(1.05); /* Slightly enlarge on hover */
+         }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around; /* Adjust spacing */
+            margin-top: 20px;
+            width: 100%; /* Ensure links take full width in flex container */
+        }
+        .footer-links div {
+            margin-bottom: 20px; /* Space between link groups */
+        }
+        .footer-links h4 {
+            margin-bottom: 12px; /* Increased margin */
+            font-size: 1.1rem; /* Adjusted font size */
+            font-weight: 600;
+             color: #cbd5e0; /* Slightly lighter heading color */
+        }
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-links li {
+            margin-bottom: 8px; /* Increased margin */
+        }
+         .footer-links a {
+             color: #a0aec0; /* Lighter link color */
+             text-decoration: none;
+             transition: color 0.3s ease; /* Smooth color transition */
+         }
+         .footer-links a:hover {
+             color: #ffffff; /* White color on hover */
+             text-decoration: underline;
+         }
+        .social-icons img {
+            height: 35px; /* Slightly larger social icons */
+            margin: 0 8px; /* Adjusted margin */
+            vertical-align: middle;
+            transition: transform 0.3s ease; /* Smooth transition */
+        }
+         .social-icons a {
+             display: inline-block; /* Ensure margin works */
+         }
+        .social-icons img:hover {
+             transform: scale(1.1); /* Slightly enlarge on hover */
+         }
+        .footer-bottom {
+            margin-top: 30px;
+            font-size: 0.85rem; /* Smaller font size */
+            border-top: 1px solid #4a5568; /* Add a separating line */
+            padding-top: 20px;
+            width: 100%; /* Ensure bottom section takes full width */
+            text-align: center; /* Center text */
+        }
+        .footer-bottom img {
+            height: 40px; /* Adjusted logo size */
+            display: block;
+            margin: 0 auto 10px auto; /* Center logo */
+        }
+        .legal-links a {
+            color: #63a8ed; /* Light blue legal link color */
+            text-decoration: none;
+            margin: 0 10px; /* Adjusted margin */
+             transition: color 0.3s ease; /* Smooth color transition */
+        }
+         .legal-links a:hover {
+             color: #ffffff; /* White color on hover */
+             text-decoration: underline;
+         }
+        /* Profile Section Styles */
+        .profile-section {
+             background-color: white; /* Add background */
+             padding: 30px; /* Add padding */
+             border-radius: 10px; /* Rounded corners */
+             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+             margin-bottom: 20px; /* Space below section */
+        }
+        .profile-section img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            object-fit: cover; /* Ensure image covers the area without distortion */
+            border: 4px solid #ffffff; /* Add a white border around image */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adjusted shadow */
+        }
+        .profile-section p {
+             margin-bottom: 15px; /* Add space below paragraphs */
+             line-height: 1.6; /* Improve readability */
+        }
+        .profile-section .text-lg {
+             font-size: 1.125rem;
+             font-weight: 600;
+             color: #7b8186; /* Adjusted color */
+        }
+         .profile-section .text-gray-600 {
+             color: #4a5568; /* Adjusted color */
+             font-size: 0.95rem;
+         }
+         .profile-section .text-sm {
+             font-size: 0.9rem;
+             color: #4a5568; /* Adjusted color */
+         }
+        .profile-section a {
+            color: #007bff; /* Use a standard blue for links */
+            text-decoration: none;
+            font-weight: 500; /* Adjusted font-weight */
+            margin-top: 15px; /* Increased margin */
+            display: inline-block;
+            transition: color 0.3s ease, text-decoration 0.3s ease; /* Smooth transitions */
+        }
+        .profile-section a:hover {
+            text-decoration: underline;
+            color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans">
-  <div class="announcement-marquee">
-    <marquee behavior="scroll" direction="left" scrollamount="5">
-      🚀 Welcome to GJ Tech! New projects coming soon! 
-      <a href="blogs.html">Check out our latest blog posts</a> | 
-      <a href="contact.html">Join our tech community</a> | 
-      <a href="about.html">Learn more about our mission</a>
-    </marquee>
-  </div>
-  <header class="bg-slate-800 text-white text-center py-6 shadow-md relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20"></div>
-    <div class="relative z-10">
-      <h1 class="text-3xl font-bold">GJ Tech</h1>
-      <p class="text-sm mt-2">Building the Future of Technology Together 👩‍💻</p>
-      <div class="flex flex-col md:flex-row justify-center items-center mt-4 space-y-4 md:space-y-0 md:space-x-4">
-        <img src="sk.jpg" alt="GJ Tech Banner" width="200" height="90" class="rounded-lg shadow transform hover:scale-105 transition-transform duration-300">
-        <img src="arrow.gif" alt="Tech Animation" class="w-40 h-40 rounded-lg shadow transform hover:scale-105 transition-transform duration-300">
-      </div>
+    <div class="announcement-marquee">
+        <marquee behavior="scroll" direction="left" scrollamount="5">
+            🚀 Welcome to GJ Tech! At GJ Tech, we are passionate about technology, innovation, and digital solutions. Our mission is to create powerful web applications.
+            <a href="blogs.html">Blogs Check here </a> //
+            <a href="contact.html">Join our tech Community contact</a> //
+            <a href="about.html">Learn more about our mission</a> //
+            <a href="registration.html">Registration Form Click Here</a>
+        </marquee>
     </div>
-  </header>
-  <nav class="bg-slate-700 text-white text-center py-3 space-x-6 text-lg">
-    <a href="index.html" class="hover:underline">Home 🏡</a>
-    <a href="blogs.html" class="hover:underline">Blogs 👩‍💻</a>
-    <a href="about.html" class="hover:underline">About 🎓</a>
-    <a href="contact.html" class="hover:underline">Contact 📶</a>
-  </nav>
-  <main class="max-w-4xl mx-auto p-6 space-y-6">
-    <section class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-300">
-      <div class="flex flex-col md:flex-row items-center gap-6">
-        <div class="flex-1">
-          <h2 class="text-2xl font-semibold text-slate-800 mb-4">Welcome to GJ Tech</h2>
-          <p class="text-gray-700 leading-relaxed">
-            Hello everyone, I’m Gajendra Singh.
-At GJ Tech, we provide concise and reliable summaries of global information, keeping you informed and up to date with the latest developments around the world.
-          </p>
+    <header class="bg-slate-800 text-white text-center py-6 shadow-md relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20"></div>
+        <div class="relative z-10">
+            <div class="absolute top-2 left-2 flex items-center space-x-4">
+                <input type="text" id="pageSearch" placeholder="Search page..." class="p-2 rounded text-black text-sm"/>
+            </div>
+            <div class="absolute top-2 right-2 flex space-x-4">
+                <a href="settings.html" class="hover:underline text-sm">Settings ⚙️</a>
+                <a href="Livemeet.html" class="hover:underline text-sm">Live Meet 📹</a>
+            </div>
+            <h1 class="text-3xl font-bold mt-10">GJ Tech</h1>
+            <p class="text-sm mt-2">Building the Future of Technology Together 👩‍💻</p>
+            <div class="flex flex-col md:flex-row justify-center items-center mt-4 space-y-4 md:space-y-0 md:space-x-4">
+                <img src="sk.jpg" alt="GJ Tech Banner" width="150" height="70" class="rounded-lg shadow transform hover:scale-105 transition-transform duration-300">
+               
+            </div>
         </div>
-        <img src="Screenshot 2025-01-27 192128.png" alt="Welcome Animation" class="w-78 h-48 rounded-lg shadow transform hover:scale-105 transition-transform duration-300">
-      </div>
-    </section>
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-300">
-        <div class="flex flex-col items-center">
-          <img src="https://media.giphy.com/media/3o7TKsQ8gqVrXyNLmg/giphy.gif" alt="Tech Trends" class="w-32 h-32 rounded-lg mb-4 transform hover:scale-105 transition-transform duration-300">
-          <h3 class="text-xl font-semibold text-slate-800 mb-2">Latest Tech Trends</h3>
-          <p class="text-gray-700">
-            Explore cutting-edge technologies and their impact on our digital future.
-          </p>
-          <a href="blogs.html" class="text-blue-600 hover:underline mt-2 inline-block">Read More →</a>
-        </div>
-      </div>
-      <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-300">
-        <div class="flex flex-col items-center">
-          <img src="https://media.giphy.com/media/3o7TKsQ8gqVrXyNLmg/giphy.gif" alt="Programming" class="w-32 h-32 rounded-lg mb-4 transform hover:scale-105 transition-transform duration-300">
-          <h3 class="text-xl font-semibold text-slate-800 mb-2">Programming Insights</h3>
-          <p class="text-gray-700">
-            Dive into the world of coding with expert tips and tutorials.
-          </p>
-          <a href="blogs.html" class="text-blue-600 hover:underline mt-2 inline-block">Read More →</a>
-        </div>
-      </div>
-    </section>
-    <section class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-300">
-      <div class="flex flex-col md:flex-row items-center gap-6">
-        <img src="https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" alt="About Preview" class="w-48 h-48 rounded-lg shadow transform hover:scale-105 transition-transform duration-300">
-        <div class="flex-1">
-          <h2 class="text-2xl font-semibold text-slate-800 mb-4">About GJ Tech</h2>
-          <p class="text-gray-700 leading-relaxed">
-            We are passionate about technology and dedicated to sharing knowledge. 
-            Our mission is to make tech accessible and exciting for everyone.
-          </p>
-          <a href="about.html" class="text-blue-600 hover:underline mt-4 inline-block">Learn More About Us →</a>
-        </div>
-      </div>
-    </section>
-    <section class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-300">
-      <h2 class="text-2xl font-semibold text-slate-800 mb-6 text-center">Multimedia Content</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="multimedia-card bg-gray-50 rounded-lg p-4">
-          <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-            <i class="fas fa-video mr-2 text-blue-600"></i> Featured Videos
-          </h3>
-          <div class="video-container mb-4 rounded-lg overflow-hidden">
-            <iframe src="http://www.youtube.com/watch?v=Yq0QkCxoTHM" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen
-                    loading="lazy">
-            </iframe>
-          </div>
-          <div class="space-y-2">
-            <a href="http://www.youtube.com/watch?v=Yq0QkCxoTHM" class="block text-blue-600 hover:underline">
-              <i class="fas fa-play-circle mr-2"></i> How to Get Started with Programming
+    </header>
+    <nav class="bg-slate-700 text-white text-center py-3 space-x-3 md:space-x-6 text-sm md:text-lg sticky top-0 z-50 shadow">
+        <a href="home.html" class="hover:underline">Home 🏡</a>
+        <a href="blogs.html" class="hover:underline">Blogs 👩‍💻</a>
+        <a href="about.html" class="hover:underline">About 🎓</a>
+        <a href="contact.html" class="hover:underline">Contact 📶</a>
+        <a href="careergoals.html" class="hover:underline">Career Goals and Opportunities </a>
+        <a href="CoursesinManagement.html" class="hover:underline">Courses in Management 📚</a>
+        <a href="Registration.html" class="hover:underline">Registration ®</a>
+        <a href="login.html" class="hover:underline">Login</a>
+    </nav>
+    <main class="container mx-auto px-4 py-8">
+        <section class="text-center mb-8 profile-section">
+            <h2 class="text-2xl font-bold mb-4">My Profile</h2>
+            <div class="flex flex-col items-center">
+                <img src="bg.jpg" alt="Your Profile" class="rounded-full w-32 h-32 mb-4 shadow-lg">
+                <p class="text-lg font-semibold">Gajendra Singh</p>
+                <p class="text-gray-600 mb-4">Gajendra Singh | B.Tech CSE Student | Tech Enthusiast | AI & Future Technologies Learner
+                    MIT Moradabad | 2023–2027 | AKTU Affiliated
+                </p>
+                <p class="text-sm mb-6">I am Gajendra Singh, currently pursuing a Bachelor of Technology in Computer Science and Engineering from MIT Moradabad, affiliated with Dr. A.P.J. Abdul Kalam Technical University (AKTU). I am deeply passionate about future-forward technologies, particularly Artificial Intelligence, Machine Learning, and advanced software development.
+                    To bridge theoretical knowledge with real-world application, I founded GJ Tech, an initiative through which I actively explore and share insights on emerging technologies via blogs, podcasts, videos, and hands-on development projects. This platform allows me to continuously learn, create, and engage with a wider tech community.
+                    I strongly believe in the power of innovation to transform lives and societies. My long-term goal is to contribute meaningfully to the advancement of AI and tech-driven solutions, both in India and globally.
+                    </p>
+                <a href="https://www.linkedin.com/in/gajendra-singh-9ba6a5306" target="_blank" class="text-blue-600 hover:underline">View my profile</a>
+            </div>
+        </section>
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-center mb-6">Technologies We Use</h2>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="multimedia-card">
+                     <img src="python.jpg" alt="Python" class="rounded-lg">
+                    <p class="text-center mt-2 text-gray-700 font-semibold">Python is a versatile programming language used for a wide range of tasks, including web development, data analysis, AI and machine learning, and automation. Its simple syntax and readability make it beginner-friendly, while its extensive libraries and frameworks support advanced applications. It's also used in areas like game development, web scraping, and desktop applications. </p>
+                </div>
+                <div class="multimedia-card">
+                     <img src="javascript.jpg" alt="JavaScript" class="rounded-lg">
+                    <p class="text-center mt-2 text-gray-700 font-semibold">JavaScript is primarily used for front-end web development to create interactive and dynamic websites. Its versatility extends to server-side development (Node.js), mobile app development (React Native), and game development. </p>
+                </div>
+                <div class="multimedia-card">
+                     <img src="html.jpg" alt="HTML5" class="rounded-lg">
+                    <p class="text-center mt-2 text-gray-700 font-semibold">HTML (HyperText Markup Language) is the fundamental language used to structure and present content on the web. It defines the basic structure of web pages, including text, images, links, and other multimedia elements. Essentially, HTML provides the backbone of a website, and then CSS and JavaScript are used to add styling and interactivity</p>
+                </div>
+                <div class="multimedia-card">
+                     <img src="css.jpg" alt="CSS3" class="rounded-lg">
+                    <p class="text-center mt-2 text-gray-700 font-semibold">Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML (including XML dialects such as SVG, MathML or XHTML). CSS describes how elements should be rendered on screen, on paper, in speech, or on other media</p>
+                </div>
+                <div class="multimedia-card">
+                     <img src="react.jpg" alt="React" class="rounded-lg">
+                    <p class="text-center mt-2 text-gray-700 font-semibold">React is a JavaScript library used for building user interfaces, particularly for single-page applications where content is dynamically updated without requiring a full page reload. It allows developers to create reusable UI components, manage application state, and efficiently update the DOM. React utilizes a virtual DOM to optimize updates and improve performance. Its component-based architecture and declarative style simplify the development process, making it easier to build complex and interactive UIs.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section class="text-center mb-8 p-6 bg-blue-100 rounded-lg shadow">
+            <h2 class="text-2xl font-bold mb-4">Already a Member?</h2>
+            <p class="text-gray-700 mb-6">Get started and connect with fellow tech enthusiasts.
+                Join our growing community, explore free resources, and start your journey in tech now!</p>
+            <p class="text-gray-600 italic mb-4">Continue building your future with our community.</p>
+                         <a href="login.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                Login Now <i class="fas fa-sign-in-alt ml-2"></i>
             </a>
-            <a href="http://www.youtube.com/watch?v=Yq0QkCxoTHM" class="block text-blue-600 hover:underline">
-              <i class="fas fa-play-circle mr-2"></i> Latest Tech Trends 2025
+        </section>
+        <br>
+        <section class="text-center mb-8 p-6 bg-green-100 rounded-lg shadow">
+            <h2 class="text-2xl font-bold mb-4">New Here? Join Our Community!</h2>
+            <p class="text-gray-700 mb-6">Register today to get started and connect with fellow tech enthusiasts.</p>
+            <p class="text-gray-600 italic mb-4">Start your tech journey today and unlock endless possibilities.</p>
+                         <a href="Registration.html" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                Register Now <i class="fas fa-user-plus ml-2"></i>
             </a>
-            <a href="http://www.youtube.com/watch?v=Yq0QkCxoTHM" class="block text-blue-600 hover:underline">
-              <i class="fas fa-play-circle mr-2"></i> Web Development Tips & Tricks
-            </a>
-          </div>
+        </section>
+        </main>
+    <footer class="footer bg-slate-900 text-white py-10">
+        <div class="container">
+            <div class="download-app mb-8 text-center md:text-left">
+                <h3 class="text-xl font-bold">Download Our App</h3>
+                 <div class="app-links">
+                     <a href="#" aria-label="Download on Google Play">
+                         <img src="playstore.jpg" alt="Google Play">
+                     </a>
+                     </div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4 class="font-semibold">About Us</h4>
+                    <ul>
+                         <li><a href="home.html">Our Story</a></li>
+                         <li><a href="about.html">Our Team</a></li>
+                         <li><a href="careergoals.html">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Services</h4>
+                    <ul>
+                         <li><a href="blogs.html">Web Development</a></li>
+                         <li><a href="blogs.html">Mobile Development</a></li>
+                         <li><a href="contact.html">Tech Consultation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Contact</h4>
+                    <ul>
+                         <li><a href="emailus.html">Email Us</a></li>
+                         <li><a href="info.html">Support</a></li>
+                         <li><a href="info.html">Inquiry</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="social-icons mt-4 w-full text-center md:text-left">
+                <a href="https://github.com/Gajendra123j" target="_blank" aria-label="Visit GJ Tech on GitHub">
+                     <img src="github.jpg" alt="GitHub">
+                 </a>
+                 <a href="https://x.com/Gajendra123j" target="_blank" aria-label="Follow GJ Tech on Twitter">
+                     <img src="twitter.jpg" alt="Twitter/X">
+                 </a>
+                 <a href="https://www.linkedin.com/in/gajendra-singh-9ba6a5306" target="_blank" aria-label="Connect with Gajendra Singh on LinkedIn">
+                     <img src="linkdin.jpg" alt="LinkedIn">
+                 </a>
+                 <a href="https://www.instagram.com/gajendra_katariya_015" target="_blank" aria-label="Follow GJ Tech on Instagram">
+                     <img src="instagram.jpg" alt="Instagram">
+                 </a>
+            </div>
         </div>
-        <div class="multimedia-card bg-gray-50 rounded-lg p-4">
-          <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-            <i class="fas fa-music mr-2 text-purple-600"></i> Tech Podcasts & Music
-          </h3>
-          <div class="space-y-4">
-            <div class="flex items-center p-3 bg-white rounded-lg shadow-sm">
-              <i class="fas fa-headphones text-purple-600 text-2xl mr-3"></i>
-              <div>
-                <h4 class="font-medium text-slate-800">Tech Talk Podcast</h4>
-                <p class="text-sm text-gray-600">Latest episode: AI in 2025</p>
+         <div class="footer-bottom mt-6 text-center">
+             <p>2025 GJ Tech Pvt. Ltd. 👩‍💻..</p>
+              <div class="legal-links mt-2">
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
               </div>
-            </div>
-            <div class="flex items-center p-3 bg-white rounded-lg shadow-sm">
-              <i class="fas fa-music text-purple-600 text-2xl mr-3"></i>
-              <div>
-                <h4 class="font-medium text-slate-800">Coding Playlist</h4>
-                <p class="text-sm text-gray-600">Focus & Productivity</p>
-              </div>
-            </div>
-            <div class="flex items-center p-3 bg-white rounded-lg shadow-sm">
-              <i class="fas fa-podcast text-purple-600 text-2xl mr-3"></i>
-              <div>
-                <h4 class="font-medium text-slate-800">Developer Interviews</h4>
-                <p class="text-sm text-gray-600">Industry Insights</p>
-              </div>
-            </div>
-          </div>
-          <div class="mt-4">
-            <a href="#" class="text-purple-600 hover:underline flex items-center">
-              <i class="fas fa-list-ul mr-2"></i> View All Podcasts & Music
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-300">
-      <div class="text-center mb-6">
-        <img src="WhatsApp Image 2025-04-24 at 01.31.55_cba145f3.jpg" alt="Gajendra Singh" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500">
-        <h2 class="text-2xl font-semibold text-slate-800">Gajendra Singh</h2>
-        <p class="text-gray-600 mt-2">Founder(CEO) & Tech Enthusiast
-    Passionate about technology and dedicated to sharing knowledge with the community & Developer</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-blue-50 rounded-lg p-4 hover:bg-blue-100 transition-colors duration-300">
-          <div class="flex items-center justify-center space-x-3">
-            <i class="fab fa-whatsapp text-3xl text-green-600"></i>
-            <div>
-              <h3 class="font-semibold text-slate-800">WhatsApp</h3>
-              <a href="https://wa.me/your-number" target="_blank" class="text-blue-600 hover:underline">
-                Click to Chat
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="bg-blue-50 rounded-lg p-4 hover:bg-blue-100 transition-colors duration-300">
-          <div class="flex items-center justify-center space-x-3">
-            <i class="fas fa-envelope text-3xl text-red-600"></i>
-            <div>
-              <h3 class="font-semibold text-slate-800">Email</h3>
-              <a href="mailto:gajendras0438@gmail.com" class="text-blue-600 hover:underline">
-                Send Message
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mt-6 text-center">
-        <p class="text-gray-700 leading-relaxed">
-          Hi, I'm Gajendra Singh! I'm passionate about technology and love sharing my knowledge with others. 
-          Feel free to reach out to me through any of the contact options above. I'm always happy to connect 
-          and discuss tech-related topics!
-        </p>
-      </div>
-    </section>
-    <div class="social-links flex justify-center space-x-6 mt-6 text-2xl text-slate-700">
-      <a href="https://x.com/Gajendra123j" target="_blank" title="Twitter" class="hover:text-blue-400 transition-colors duration-300">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="https://www.instagram.com/gajendra_katariya_015" target="_blank" title="Instagram" class="hover:text-pink-500 transition-colors duration-300">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://www.linkedin.com/in/gajendra-singh-9ba6a5306/" target="_blank" title="LinkedIn" class="hover:text-blue-700 transition-colors duration-300">
-        <i class="fab fa-linkedin"></i>
-      </a>
-      <a href="https://github.com/Gajendra123j" target="_blank" title="GitHub" class="hover:text-gray-800 transition-colors duration-300">
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-  </main>
-  <section class="max-w-4xl mx-auto p-6">
-    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-      <h2 class="text-2xl font-semibold text-slate-800 mb-6 text-center">Course Check-In</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-blue-50 rounded-lg p-6 hover:bg-blue-100 transition-colors duration-300">
-          <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-            <i class="fas fa-graduation-cap text-blue-600 mr-2"></i> Available Courses
-          </h3>
-          <ul class="space-y-3">
-            <li class="flex items-center p-3 bg-white rounded-lg shadow-sm">
-              <i class="fas fa-code text-green-600 mr-3"></i>
-              <div>
-                <h4 class="font-medium text-slate-800">Web Development</h4>
-                <p class="text-sm text-gray-600">HTML, CSS, JavaScript, React</p>
-              </div>
-            </li>
-            <li class="flex items-center p-3 bg-white rounded-lg shadow-sm">
-              <i class="fas fa-mobile-alt text-blue-600 mr-3"></i>
-              <div>
-                <h4 class="font-medium text-slate-800">Mobile App Development</h4>
-                <p class="text-sm text-gray-600">Flutter, React Native</p>
-              </div>
-            </li>
-            <li class="flex items-center p-3 bg-white rounded-lg shadow-sm">
-              <i class="fas fa-database text-purple-600 mr-3"></i>
-              <div>
-                <h4 class="font-medium text-slate-800">Backend Development</h4>
-                <p class="text-sm text-gray-600">Node.js, Python, Django</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="bg-green-50 rounded-lg p-6 hover:bg-green-100 transition-colors duration-300">
-          <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-            <i class="fas fa-calendar-check text-green-600 mr-2"></i> Course Schedule
-          </h3>
-          <div class="space-y-4">
-            <div class="p-4 bg-white rounded-lg shadow-sm">
-              <div class="flex justify-between items-center">
-                <h4 class="font-medium text-slate-800">Web Development Bootcamp</h4>
-                <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">Starting Soon</span>
-              </div>
-              <p class="text-sm text-gray-600 mt-2">Duration: 12 weeks</p>
-            </div>
-            <div class="p-4 bg-white rounded-lg shadow-sm">
-              <div class="flex justify-between items-center">
-                <h4 class="font-medium text-slate-800">Mobile App Development</h4>
-                <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Enrolling Now</span>
-              </div>
-              <p class="text-sm text-gray-600 mt-2">Duration: 8 weeks</p>
-            </div>
-            <div class="p-4 bg-white rounded-lg shadow-sm">
-              <div class="flex justify-between items-center">
-                <h4 class="font-medium text-slate-800">Backend Development</h4>
-                <span class="text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded">Coming Soon</span>
-              </div>
-              <p class="text-sm text-gray-600 mt-2">Duration: 10 weeks</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mt-6 text-center">
-        <a href="contact.html" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300">
-          <i class="fas fa-user-plus mr-2"></i> Enroll Now
-        </a>
-      </div>
-    </div>
-  </section>
-  <footer class="bg-slate-800 text-white text-center py-4 mt-10">
-    <p>&copy; 2025 GJ Tech 👩‍💻..</p>
-  </footer>
+         </div>
+    </footer>
+    <script>
+        // Get the search input field and all the main sections
+        const pageSearchInput = document.getElementById('pageSearch');
+        const mainSections = document.querySelectorAll('main section'); // Select all section elements within main
+        // Add an event listener to the search input for real-time filtering
+        pageSearchInput.addEventListener('input', () => {
+            // Get the search keyword and convert to lowercase for case-insensitive search
+            const keyword = pageSearchInput.value.toLowerCase();
+            // Loop through all main sections and show/hide based on search keyword
+            mainSections.forEach(section => {
+                // Get the text content of the section and convert to lowercase
+                const text = section.innerText.toLowerCase();
+                // If the section's text includes the keyword, display the section, otherwise hide it
+                if (text.includes(keyword)) {
+                    section.style.display = 'block'; // Or 'flex', 'grid', etc., depending on original display
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
-</html> 
+</html>

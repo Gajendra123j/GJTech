@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Meet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/socket.io-client@4"></script>
+    <style>
+        /* Custom styles for the video container and controls */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Limit max width */
+            margin: 20px auto; /* Center the container */
+            background-color: #000; /* Black background for video area */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        .video-container video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Space between buttons */
+            transition: opacity 0.3s ease;
+            opacity: 1; /* Controls are visible by default */
+        }
+        /* Optional: Hide controls on hover over container, show on hover over controls */
+        /* .video-container:hover .controls {
+            opacity: 1;
+        } */
+
+        .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 50px;
+    }
+
+    .controls button {
+      background-color: rgba(164, 185, 28, 0.957); /* Red circular buttons */
+      color: white;
+      border: none;
+      border-radius: 50%; /* Makes the button circular */
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    .controls button:hover {
+      background-color: rgba(20, 160, 137, 0.9);
+      transform: scale(1.05);
+    }
+
+    .controls button:active {
+      transform: scale(0.95);
+    }
+        .controls button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .controls button:active {
+            transform: scale(0.95); /* Slightly shrink button when clicked */
+        }
+        .controls button i {
+            font-size: 18px;
+        }
+        #remoteVideos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center; /* Centers the videos horizontally */
+        }
+        #remoteVideos video {
+            width: 320px;  /* Slightly larger default size */
+            height: 240px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: #000;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Live Meeting</h1>
+    <div class="video-container">
+        <video id="localVideo" autoplay muted playsinline></video>
+        <div class="controls">
+            <button id="toggleMic" title="Toggle Microphone">
+                <i class="fas fa-microphone"></i> </button>
+            <button id="toggleCamera" title="Toggle Camera">
+                <i class="fas fa-video"></i> </button>
+            <button id="endCall" title="End Call" class="bg-red-600 hover:bg-red-700">
+                <i class="fas fa-phone-slash"></i> </button>
+            <button id="startShare" title="Share Screen">
+                <i class="fas fa-desktop"></i>
+            </button>
+        </div>
+    </div>
+    <div id="remoteVideos">
+        </div>
+    <script>
+       // Basic JavaScript to demonstrate getting local and remote media stream (camera and microphone)
+        // This requires user permission and will show a prompt in the browser
+        const localVideo = document.getElementById('localVideo');
+        const toggleMicButton = document.getElementById('toggleMic');
+        const toggleCameraButton = document.getElementById('toggleCamera');
+        const endCallButton = document.getElementById('endCall');
+        const startShareButton = document.getElementById('startShare');  // Get the new button
+        const remoteVideosContainer = document.getElementById('remoteVideos');
+        let localStream = null;
+        let micEnabled = true;
+        let cameraEnabled = true;
+        let sharingEnabled = false;
+        let peerConnections = {}; // Store RTCPeerConnections, key is peer ID
+        let socket;
+        const servers = {
+            iceServers: [
+                {
+                    urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302']
+                },
+            ]
+        };
+        // Function to start the local media stream
+        async function startLocalStream() {
+            try {
+                // Request access to microphone and camera
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                // Attach the stream to the video element
+                localVideo.srcObject = localStream;
+                console.log('Local stream started.');
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+                alert('Could not access camera or microphone. Please check permissions.');
+            }
+        }
+        // Function to toggle microphone
+        toggleMicButton.addEventListener('click', () => {
+            if (localStream) {
+                const audioTrack = localStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    micEnabled = !micEnabled;
+                    audioTrack.enabled = micEnabled;
+                    // Change icon based on state (requires Font Awesome classes)
+                    toggleMicButton.querySelector('i').classList.toggle('fa-microphone');
+                    toggleMicButton.querySelector('i').classList.toggle('fa-microphone-slash');
+                    console.log('Microphone enabled:', micEnabled);
+                     // Notify other peers about the change
+                    for (let peerId in peerConnections) {
+                        const pc = peerConnections[peerId];
+                        if (pc && pc.connectionState !== 'closed') {
+                            //  Here we use socket.io to send mic state.
+                            socket.emit('mic-status-change', { peerId: peerId, enabled: micEnabled });
+                        }
+                    }
+                }
+            }
+        });
+        // Function to toggle camera
+        toggleCameraButton.addEventListener('click', () => {
+            if (localStream) {
+                const videoTrack = localStream.getVideoTracks()[0];
+                if (videoTrack) {
+                    cameraEnabled = !cameraEnabled;
+                    videoTrack.enabled = cameraEnabled;
+                    // Change icon based on state (requires Font Awesome classes)
+                    toggleCameraButton.querySelector('i').classList.toggle('fa-video');
+                    toggleCameraButton.querySelector('i').classList.toggle('fa-video-slash');
+                    console.log('Camera enabled:', cameraEnabled);
+                    // Notify other peers
+                    for (let peerId in peerConnections) {
+                        const pc = peerConnections[peerId];
+                        if (pc && pc.connectionState !== 'closed') {
+                             socket.emit('camera-status-change', { peerId: peerId, enabled: cameraEnabled });
+                        }
+                    }
+                }
+            }
+        });
+        // Function to end the call (stops tracks)
+        endCallButton.addEventListener('click', () => {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localVideo.srcObject = null;
+                localStream = null;
+                console.log('Call ended.');
+                // Close all peer connections
+                for (let peerId in peerConnections) {
+                    if (peerConnections[peerId]) {
+                        peerConnections[peerId].close();
+                    }
+                }
+                peerConnections = {};
+                // Disconnect from Socket.IO
+                if (socket) {
+                    socket.disconnect();
+                }
+                alert('Call ended.  Reload to start a new call.');
+            }
+        });
+        // Function to handle screen sharing
+        startShareButton.addEventListener('click', async () => {
+            try {
+                if (sharingEnabled) {
+                    // Stop screen sharing
+                    if (localStream) {
+                        localStream.getTracks().forEach(track => {
+                            if (track.kind === 'video' && track.label === 'screen') {
+                                track.stop();
+                                localStream.removeTrack(track);
+                            }
+                        });
+                    }
+                    sharingEnabled = false;
+                     startShareButton.querySelector('i').classList.remove('fa-desktop-slash');
+                    startShareButton.querySelector('i').classList.add('fa-desktop');
+                    // Restart the camera
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    localVideo.srcObject = localStream;
+                     // Re-add tracks to all existing peer connections
+                    for (let peerId in peerConnections) {
+                        const pc = peerConnections[peerId];
+                        if (pc && pc.connectionState !== 'closed') {
+                            localStream.getTracks().forEach(track => {
+                                pc.addTrack(track, localStream);
+                            });
+                        }
+                    }
+                } else {
+                    // Start screen sharing
+                    localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    localVideo.srcObject = localStream;
+                    sharingEnabled = true;
+                    startShareButton.querySelector('i').classList.remove('fa-desktop');
+                    startShareButton.querySelector('i').classList.add('fa-desktop-slash');
+                    // Replace tracks in existing peer connections
+                    for (let peerId in peerConnections) {
+                      const pc = peerConnections[peerId];
+                      if (pc && pc.connectionState !== 'closed') {
+                        // Remove existing video track
+                        pc.getSenders().forEach(sender => {
+                            if (sender.track && sender.track.kind === 'video') {
+                                pc.removeTrack(sender.track);
+                            }
+                        });
+                        // Add screen share track
+                        localStream.getVideoTracks().forEach(videoTrack => {
+                            pc.addTrack(videoTrack, localStream);
+                        });
+                       //send offer again, so other side can receive new track.
+                        try {
+                            const offer = await pc.createOffer();
+                            await pc.setLocalDescription(offer);
+                            socket.emit('offer', { sdp: offer, receiverId: peerId });
+                        } catch (error) {
+                            console.error("Error creating offer: ", error);
+                        }
+                    }
+                    }
+                }
+            } catch (error) {
+                console.error('Error accessing screen sharing:', error);
+                alert('Could not access screen sharing. Please check permissions.');
+            }
+        });
+        function createPeerConnection(peerId) {
+            const pc = new RTCPeerConnection(servers);
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    // Send ICE candidate to the other peer
+                    socket.emit('ice-candidate', {
+                        candidate: event.candidate,
+                        receiverId: peerId,
+                    });
+                }
+            };
+            pc.ontrack = (event) => {
+                // Handle remote media stream
+                let remoteVideo = document.getElementById(`remoteVideo-${peerId}`);
+                if (!remoteVideo) {
+                    remoteVideo = document.createElement('video');
+                    remoteVideo.id = `remoteVideo-${peerId}`;
+                    remoteVideo.autoplay = true;
+                    remoteVideo.playsinline = true;
+                    remoteVideosContainer.appendChild(remoteVideo);
+                }
+                remoteVideo.srcObject = event.streams[0];
+            };
+            // Add local stream tracks to the connection
+            localStream.getTracks().forEach(track => {
+                pc.addTrack(track, localStream);
+            });
+            return pc;
+        }
+        // Start the local stream when the page loads
+        window.onload = () => {
+            startLocalStream().then(() => {
+                // Initialize Socket.IO connection after local stream is ready
+                socket = io();
+                socket.on('connect', () => {
+                    console.log('Connected to signaling server.');
+                    socket.emit('join', { /* You can send user info here if needed */ });
+                });
+                socket.on('user-joined', (data) => {
+                    const peerId = data.userId;
+                    if (peerId !== socket.id) { // Don't create connection with yourself.
+                        console.log(`User ${peerId} joined.  My ID is ${socket.id}`);
+                        let pc = peerConnections[peerId];
+                        if (!pc) {
+                            pc = createPeerConnection(peerId);
+                            peerConnections[peerId] = pc;
+                        }
+                        // Create an offer to send to the new user
+                        pc.createOffer()
+                            .then(offer => {
+                                return pc.setLocalDescription(offer);
+                            })
+                            .then(() => {
+                                socket.emit('offer', { sdp: pc.localDescription, receiverId: peerId });
+                            })
+                            .catch(error => {
+                                console.error('Error creating offer:', error);
+                            });
+                    }
+                });
+                 socket.on('offer', (data) => {
+                    const peerId = data.senderId;
+                    const offer = data.sdp;
+                    console.log(`Received offer from ${peerId}:`, offer);
+                    let pc = peerConnections[peerId];
+                    if (!pc) {
+                        pc = createPeerConnection(peerId);
+                        peerConnections[peerId] = pc;
+                    }
+                    pc.setRemoteDescription(new RTCSessionDescription(offer))
+                        .then(() => {
+                            return pc.createAnswer();
+                        })
+                        .then(answer => {
+                            return pc.setLocalDescription(answer);
+                        })
+                        .then(() => {
+                            socket.emit('answer', { sdp: pc.localDescription, receiverId: peerId, senderId: socket.id });
+                        })
+                        .catch(error => {
+                            console.error('Error handling offer:', error);
+                        });
+                });
+                socket.on('answer', (data) => {
+                    const peerId = data.senderId;
+                    const answer = data.sdp;
+                    console.log(`Received answer from ${peerId}:`, answer);
+                    const pc = peerConnections[peerId];
+                    if (pc) {
+                        pc.setRemoteDescription(new RTCSessionDescription(answer))
+                            .catch(error => {
+                                console.error('Error setting answer:', error);
+                            });
+                    }
+                });
+                socket.on('ice-candidate', (data) => {
+                    const peerId = data.senderId;
+                    const candidate = data.candidate;
+                    const pc = peerConnections[peerId];
+                    if (pc) {
+                        pc.addIceCandidate(new RTCIceCandidate(candidate))
+                            .catch(error => {
+                                console.error('Error adding ICE candidate:', error);
+                            });
+                    }
+                });
+                socket.on('user-disconnected', (data) => {
+                    const peerId = data.userId;
+                    console.log(`User ${peerId} disconnected.`);
+                    if (peerConnections[peerId]) {
+                        peerConnections[peerId].close();
+                        delete peerConnections[peerId];
+                        // Remove the video element
+                        const remoteVideo = document.getElementById(`remoteVideo-${peerId}`);
+                        if (remoteVideo) {
+                            remoteVideo.parentNode.removeChild(remoteVideo);
+                        }
+                    }
+                });
+                 socket.on('mic-status-changed', (data) => {
+                    const peerId = data.peerId;
+                    const enabled = data.enabled;
+                    console.log(`Mic status changed for ${peerId}: ${enabled}`);
+                    // You might want to update the UI to reflect the mic status
+                    // For example, change the icon or add a visual indicator
+                });
+
+                socket.on('camera-status-changed', (data) => {
+                    const peerId = data.peerId;
+                    const enabled = data.enabled;
+                    console.log(`Camera status changed for ${peerId}: ${enabled}`);
+                    // Update UI to show camera status
+                });
+            });
+        };
+    </script>
+</body>
+</html>
